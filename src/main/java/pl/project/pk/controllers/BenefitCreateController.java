@@ -7,11 +7,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import org.omg.CORBA.portable.ApplicationException;
+import pl.project.pk.database.dao.EmployeeDao;
+import pl.project.pk.database.dbutils.DbManager;
+import pl.project.pk.database.models.BaseModel;
+import pl.project.pk.database.models.Employee;
 import pl.project.pk.mapper.EmployeeMapper;
-import pl.project.pk.models.employeeModel;
+import pl.project.pk.models.EmployeeModel;
 import pl.project.pk.models.BenefitModel;
 import pl.project.pk.utils.FxmlUtils;
 import pl.project.pk.utils.ModalUtils;
+import pl.project.pk.utils.converters.ConventerEmployee;
 import pl.project.pk.utils.factory.BenefitFactoryMethod;
 import pl.project.pk.utils.benefit.BenefitBase;
 
@@ -37,14 +42,14 @@ public class BenefitCreateController {
     @FXML
     public Button saveButton;
 
-    private employeeModel employeeModel;
+    private EmployeeModel employeeModel;
     private BenefitModel benefitModel;
 
     private static ResourceBundle bundle = FxmlUtils.getResourceBundle();
 
     @FXML
     private void initialize() throws ApplicationException {
-        this.employeeModel = new employeeModel();
+        this.employeeModel = new EmployeeModel();
         this.benefitModel = new BenefitModel();
         try {
             this.employeeModel.init();
@@ -56,7 +61,7 @@ public class BenefitCreateController {
         this.employeeList.setItems(employeeModel.getEmployeeMapperObservableList());
     }
 
-    //TODO sprawdzanie danych
+
     public void saveButton(ActionEvent actionEvent) throws ApplicationException {
         if (this.isValid()) {
             this.benefitModel.saveBenefitInDataBase(
@@ -64,6 +69,40 @@ public class BenefitCreateController {
                     this.typeMutual.getText(),
                     this.amount.getText()
             );
+
+            Integer amountMutal = 0;
+            Integer amountBenefit = 0;
+
+            //zapisuję do bazy
+
+            if (this.employeeUsedBenefit.getText().length() != 0 ){
+                amountBenefit = Integer.parseInt(this.employeeUsedBenefit.getText());
+            }
+
+            if (this.amount.getText().length() != 0) {
+                amountMutal = Integer.parseInt(this.amount.getText());
+            }
+
+            Integer diff = 0;
+            diff =amountBenefit - amountMutal;
+
+            this.employeeList.getSelectionModel().getSelectedItem().setUsedBenefit(String.valueOf(diff));
+
+            Integer idToUpdate = this.employeeList.getSelectionModel().getSelectedItem().getId();
+
+            EmployeeDao employeeDao = new EmployeeDao(DbManager.getConnectionSource());
+
+
+
+            EmployeeMapper emp = this.employeeList.getSelectionModel().getSelectedItem();
+            Employee employee = ConventerEmployee.convertToEmployee(emp);
+            employee.setId(idToUpdate);
+            //employeeDao.deteleById(Employee.class,idToUpdate);
+            employeeDao.updateId(employee, idToUpdate);
+            employeeDao.update(employee);
+            DbManager.closeConnectionDB();
+
+
         }
         this.clearAll();
     }

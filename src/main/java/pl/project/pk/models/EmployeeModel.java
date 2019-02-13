@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class employeeModel {
+public class EmployeeModel {
 
     public static final String FIELD_NAME_FIRST_NAME = "firstName";
     public static final String FIELD_NAME_LAST_NAME = "lastName";
@@ -45,7 +45,7 @@ public class employeeModel {
     }
 
 
-    public void saveCategoryInDataBase(Map<String, String> data ) throws ApplicationException {
+    public void saveEmployeeInDataBase(Map<String, String> data ) throws ApplicationException {
         EmployeeDao employeeDao = new EmployeeDao(DbManager.getConnectionSource());
         Employee employee = new Employee();
 

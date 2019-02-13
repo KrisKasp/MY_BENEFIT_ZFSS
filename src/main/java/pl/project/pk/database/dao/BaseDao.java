@@ -46,6 +46,24 @@ public abstract class BaseDao {
         }
     }
 
+    public <T extends BaseModel, I> void update(BaseModel baseModel) throws ApplicationException {
+        Dao<T, I> dao = getDao((Class<T>) baseModel.getClass());
+        try{
+            dao.update((T) baseModel);
+        } catch (SQLException e){
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
+    public <T extends BaseModel, I> void updateId(BaseModel baseModel, I id) throws ApplicationException {
+        Dao<T, I> dao = getDao((Class<T>) baseModel.getClass());
+        try{
+            dao.updateId((T) baseModel, id);
+        } catch (SQLException e){
+            LOGGER.warn(e.getMessage());
+        }
+    }
+
     public <T extends BaseModel, I> void refresh(BaseModel baseModel) throws ApplicationException {
         try {
             Dao<T, I> dao = getDao((Class<T>) baseModel.getClass());

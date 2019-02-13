@@ -5,7 +5,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.omg.CORBA.portable.ApplicationException;
 import pl.project.pk.mapper.EmployeeMapper;
-import pl.project.pk.models.employeeModel;
+import pl.project.pk.models.EmployeeModel;
 
 public class EmployeeStoreController {
 
@@ -33,11 +33,11 @@ public class EmployeeStoreController {
     @FXML
     private TableColumn<EmployeeMapper, String> benefitColumn;
 
-    private employeeModel employeeModel;
+    private EmployeeModel employeeModel;
 
 
     public void initialize(){
-        this.employeeModel = new employeeModel();
+        this.employeeModel = new EmployeeModel();
 
         try {
             this.employeeModel.init();

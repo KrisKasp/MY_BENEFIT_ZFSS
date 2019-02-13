@@ -8,12 +8,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import org.omg.CORBA.portable.ApplicationException;
-import pl.project.pk.models.employeeModel;
+import pl.project.pk.models.EmployeeModel;
 import pl.project.pk.utils.FxmlUtils;
 import pl.project.pk.utils.ModalUtils;
-import pl.project.pk.utils.NumberOnlyFilter;
 
-import javax.swing.text.AbstractDocument;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -42,13 +40,13 @@ public class EmployeeCreateController {
     @FXML
     public Button saveEmployeeButton;
 
-    private pl.project.pk.models.employeeModel employeeModel;
+    private EmployeeModel employeeModel;
 
     private static ResourceBundle bundle = FxmlUtils.getResourceBundle();
 
     @FXML
     public void initialize() throws ApplicationException {
-        this.employeeModel = new employeeModel();
+        this.employeeModel = new EmployeeModel();
         this.employeeModel.init();
         this.initBindings();
 
@@ -145,15 +143,15 @@ public class EmployeeCreateController {
     //TODO zrobić walidację danych
     public void saveEmployee(ActionEvent actionEvent) throws ApplicationException {
         Map<String, String> dataForm = new HashMap<String, String>();
-        dataForm.put(pl.project.pk.models.employeeModel.FIELD_NAME_FIRST_NAME,firstName.getText());
-        dataForm.put(pl.project.pk.models.employeeModel.FIELD_NAME_LAST_NAME,lastName.getText());
-        dataForm.put(pl.project.pk.models.employeeModel.FIELD_NAME_ADDRESS,address.getText());
-        dataForm.put(pl.project.pk.models.employeeModel.FIELD_NAME_NET_INCOME, netincome.getText());
-        dataForm.put(pl.project.pk.models.employeeModel.FIELD_NAME_EMAIL,email.getText());
-        dataForm.put(pl.project.pk.models.employeeModel.FIELD_NAME_PHONE,phone.getText());
-        dataForm.put(pl.project.pk.models.employeeModel.FIELD_USED_BENEFIT,getBenefitAmount(netincome.getText()) );
+        dataForm.put(EmployeeModel.FIELD_NAME_FIRST_NAME,firstName.getText());
+        dataForm.put(EmployeeModel.FIELD_NAME_LAST_NAME,lastName.getText());
+        dataForm.put(EmployeeModel.FIELD_NAME_ADDRESS,address.getText());
+        dataForm.put(EmployeeModel.FIELD_NAME_NET_INCOME, netincome.getText());
+        dataForm.put(EmployeeModel.FIELD_NAME_EMAIL,email.getText());
+        dataForm.put(EmployeeModel.FIELD_NAME_PHONE,phone.getText());
+        dataForm.put(EmployeeModel.FIELD_USED_BENEFIT,getBenefitAmount(netincome.getText()) );
 
-        employeeModel.saveCategoryInDataBase(dataForm);
+        employeeModel.saveEmployeeInDataBase(dataForm);
         this.clearAllTextField();
     }
 
